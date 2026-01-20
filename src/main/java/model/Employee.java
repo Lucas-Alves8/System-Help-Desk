@@ -1,15 +1,19 @@
 package model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
+import lombok.Data;
+import model.enums.Sector;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
+@Entity
+@Data
+@Table(name = "employee")
 public class Employee {
 
-    @Column(name = "id", nullable = false)
+    @Id
+    @GeneratedValue
     @UuidGenerator
     private UUID id;
 
@@ -24,6 +28,9 @@ public class Employee {
 
     @Column(name = "rg", nullable = false, length = 14)
     private String rg;
+
+    @Column(name = "email", nullable = false, length = 35)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sector", nullable = false, length = 20)
