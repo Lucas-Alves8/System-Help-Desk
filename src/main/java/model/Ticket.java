@@ -17,7 +17,6 @@ public class Ticket {
 
     @UuidGenerator
     @Id
-    @GeneratedValue
     private UUID id;
 
     @Column(nullable = false, length = 300)

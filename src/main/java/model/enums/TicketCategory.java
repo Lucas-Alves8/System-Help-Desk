@@ -5,7 +5,7 @@ public enum TicketCategory {
     NETWORK,
     SOFTWARE,
     EMAIL,
-    CREATEUSER,
-    DELETEUSER,
+    CREATE_USER,
+    DELETE_USER,
     CAMERA,
 }

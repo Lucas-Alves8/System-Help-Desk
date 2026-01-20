@@ -5,6 +5,8 @@ import lombok.Data;
 import model.enums.Sector;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.UUID;
 
 @Entity
@@ -13,20 +15,19 @@ import java.util.UUID;
 public class Employee {
 
     @Id
-    @GeneratedValue
     @UuidGenerator
     private UUID id;
 
     @Column(name = "name", nullable = false, length = 40)
     private String name;
 
-    @Column(name = "age", nullable = false, length = 3)
-    private Integer age;
+    @Column(name = "dateBirthday", nullable = false, length = 3)
+    private LocalDate birthdayDate;
 
     @Column(name = "cpf", nullable = false, length = 11)
     private String cpf;
 
-    @Column(name = "rg", nullable = false, length = 14)
+    @Column(name = "rg", nullable = false, length = 15)
     private String rg;
 
     @Column(name = "email", nullable = false, length = 35)
@@ -35,4 +36,9 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     @Column(name = "sector", nullable = false, length = 20)
     private Sector sector;
+
+    @Transient
+    public int getAge () {
+        return Period.between(birthdayDate, LocalDate.now()).getYears();
+    }
 }

@@ -2,7 +2,7 @@ package model.enums;
 
 public enum TicketStatus {
     OPEN,
-    INPROGRESS,
+    IN_PROGRESS,
     RESOLVED,
     CLOSED
 }
