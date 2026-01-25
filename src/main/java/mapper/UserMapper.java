@@ -2,6 +2,7 @@ package com.lucas_alves.helpdesk.mapper;
 
 import controller.dto.CreateUserDto;
 import controller.dto.UpdateUserDto;
+import controller.dto.UserFindAll;
 import model.User;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ public class UserMapper {
 
         return user;
     }
+
     public void toEntity(UpdateUserDto updateUserDto, User user) {
 
         user.setName(updateUserDto.name());
@@ -27,6 +29,16 @@ public class UserMapper {
         user.setEmail(updateUserDto.email());
         user.setSector(updateUserDto.sector());
         user.setRole(updateUserDto.role());
+    }
+    public void toEntity(User user) {
 
+        return new UserFindAll(
+                user.getId(),
+                user.getName(),
+                user.getBirthdayDate(),
+                user.getEmail(),
+                user.getSector(),
+                user.getRole()
+        );
     }
 }
