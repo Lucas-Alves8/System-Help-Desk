@@ -1,7 +1,7 @@
 package model.enums;
 
 public enum Sector {
-    TI,
+    IT,
     COMERCIAL,
     NEGOCIATIONS,
     REVENUE,

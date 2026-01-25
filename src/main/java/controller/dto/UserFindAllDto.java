@@ -6,7 +6,7 @@ import model.enums.Sector;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record UserFindAll(
+public record UserFindAllDto(
         UUID id,
         String name,
         LocalDate birthdayDate,
