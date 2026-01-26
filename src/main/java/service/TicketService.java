@@ -4,7 +4,6 @@ import controller.dto.*;
 import lombok.RequiredArgsConstructor;
 import mapper.TicketMapper;
 import model.Ticket;
-import model.enums.TicketCategory;
 import model.enums.TicketPriority;
 import model.enums.TicketStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,21 +23,21 @@ public class TicketService {
     private final TicketMapper ticketMapper;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'SUPPORTTI')")
-    public Ticket create(TicketCreateDto ticketCreateDto) {
+    public Ticket ticketCreate(TicketCreateDto ticketCreateDto) {
 
         Ticket ticket = ticketMapper.toEntity(ticketCreateDto);
         return ticketRepository.save(ticket);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','SUPPORTTI')")
-    public void update(UUID id, TicketUpdateDto ticketUpdateDto) {
+    public Ticket ticketUpdate(UUID id, TicketUpdateDto ticketUpdateDto) {
 
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found or not existed"));
 
         ticketMapper.toEntity(ticketUpdateDto, ticket);
 
-        ticketRepository.save(ticket);
+        return ticketRepository.save(ticket);
 
     }
 
@@ -90,7 +89,7 @@ public class TicketService {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','SUPPORTTI')")
-    public TicketCloseDto finishTicket(UUID id, String responsible) {
+    public TicketCloseDto ticketClose(UUID id, String responsible) {
 
         Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
 
