@@ -1,6 +1,8 @@
 package service;
 
+import controller.dto.*;
 import lombok.RequiredArgsConstructor;
+import mapper.TicketMapper;
 import model.Ticket;
 import model.enums.TicketCategory;
 import model.enums.TicketPriority;
@@ -18,45 +20,34 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TicketService {
 
-    private final TicketRepository repository;
+    private final TicketRepository ticketRepository;
+    private final TicketMapper ticketMapper;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE', 'SUPPORTTI')")
-    public Ticket createTicket(String commentary, String title, TicketPriority ticketPriority, TicketCategory ticketCategory, String requester) {
+    public Ticket create(TicketCreateDto ticketCreateDto) {
 
-        Ticket ticket = new Ticket();
-
-        ticket.setTitle(title);
-        ticket.setCommentary(commentary);
-        ticket.setTicketPriority(ticketPriority);
-        ticket.setTicketCategory(ticketCategory);
-        ticket.setRequester(requester);
-        ticket.setTicketStatus(TicketStatus.OPEN);
-        ticket.setCreatedAt(LocalDateTime.now());
-
-        return repository.save(ticket);
+        Ticket ticket = ticketMapper.toEntity(ticketCreateDto);
+        return ticketRepository.save(ticket);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','SUPPORTTI')")
-    public Ticket updateTicket(UUID id, TicketPriority ticketPriority, String responsible, String commentary) {
+    public void update(UUID id, TicketUpdateDto ticketUpdateDto) {
 
-        Ticket ticket = repository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found or not existed"));
 
-        if (ticket.getTicketStatus() != TicketStatus.OPEN) throw new RuntimeException("Ticket not created or not open");
+        ticketMapper.toEntity(ticketUpdateDto, ticket);
 
-        ticket.setTicketPriority(ticketPriority);
-        ticket.setResponsible(responsible);
-        ticket.setCommentary(commentary);
+        ticketRepository.save(ticket);
 
-        return repository.save(ticket);
     }
-
 
     @PreAuthorize("hasRole('ADMIN')")
     public Ticket deleteTicket(UUID id) {
 
-        Ticket ticket = repository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        repository.delete(ticket);
+        ticketRepository.delete(ticket);
         return ticket;
     }
 
@@ -81,28 +72,37 @@ public class TicketService {
         return ticket;
     }
 
-    public List<Ticket> findAll() {
+    public List<TicketFindAllDto> findAll() {
 
-        return repository.findAll();
+        return ticketRepository.findAll()
+                .stream()
+                .map(ticketMapper::tofindAll)
+                .toList();
     }
 
-    public Ticket findById(UUID id) {
+    public TicketFindByIdDto findById(UUID id) {
 
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Id not found or not existed"));
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Id not found or not existed"));
+
+        return ticketMapper.toFindById(ticket);
 
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','SUPPORTTI')")
-    public Ticket finishTicket(UUID id, String responsible, TicketStatus ticketStatus) {
+    public TicketCloseDto finishTicket(UUID id, String responsible) {
 
-        Ticket ticket = repository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        if (ticket.getTicketStatus() != TicketStatus.OPEN) throw new RuntimeException("Ticket not created or not open");
+        if (ticket.getTicketStatus() != TicketStatus.OPEN)
+            throw new RuntimeException("Ticket not created or not open");
 
         ticket.setResponsible(responsible);
         ticket.setTicketStatus(TicketStatus.CLOSED);
         ticket.setClosedAt(LocalDateTime.now());
 
-        return repository.save(ticket);
+        ticketRepository.save(ticket);
+
+        return ticketMapper.toCloseDto(ticket);
     }
 }

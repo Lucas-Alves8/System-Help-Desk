@@ -4,6 +4,7 @@ import controller.dto.*;
 import mapper.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import model.Ticket;
 import model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPPORTTI')")
-    public UserFindByIdDto findById(UUID id) {
+    public UserFindByIdDto findById(UUID id){
 
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Id not found or id wrong"));
 
