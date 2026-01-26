@@ -22,7 +22,7 @@ public class TicketController {
         return ticketService.ticketCreate(ticketCreateDto);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public Ticket ticketUpdate(@PathVariable UUID id, @RequestBody @Valid TicketUpdateDto ticketUpdateDto) {
         return ticketService.ticketUpdate(id, ticketUpdateDto);
     }

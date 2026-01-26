@@ -4,7 +4,6 @@ import controller.dto.*;
 import mapper.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import model.Ticket;
 import model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class UserService {
     private final UserMapper mapper;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPPORTTI')")
-    public User createUser(UserCreateDto userCreateDto) {
+    public User userCreate(UserCreateDto userCreateDto) {
 
         if (userRepository.existsByCpf(userCreateDto.cpf())) {
             throw new RuntimeException("Cpf already registred");
@@ -37,7 +36,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public User updateUser(UserUpdateDto userUpdateDto) {
+    public User userUpdate(UserUpdateDto userUpdateDto) {
 
         User user = userRepository.findById(userUpdateDto.id()).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -47,7 +46,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(UUID id) {
+    public void userDelete(UUID id) {
 
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -55,7 +54,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAnyRole( 'ADMIN', 'SUPPORTTI')")
-    public List<UserFindAllDto> listUser() {
+    public List<UserFindAllDto> listAllUsers() {
 
         return userRepository.findAll()
                 .stream()
@@ -90,9 +89,9 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void changeUserRoleDto(UserChangeRoleDto userChangeRoleDto) {
+    public void userChangeRoleDto(UUID id, UserChangeRoleDto userChangeRoleDto) {
 
-        User user = userRepository.findById(userChangeRoleDto.id())
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setRole(userChangeRoleDto.role());

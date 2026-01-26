@@ -18,7 +18,7 @@ public record TicketUpdateDto(
         @NotNull(message = "Ticket priority is necessary")
         TicketPriority ticketPriority,
 
-        @NotNull(message = "Ticket priority is necessary")
+        @NotNull(message = "Ticket category is necessary")
         TicketCategory ticketCategory
         ){
 }

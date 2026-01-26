@@ -67,7 +67,6 @@ public class UserMapper {
     public UserChangeRoleDto toChangeUserRole(User user) {
 
         return new UserChangeRoleDto(
-                user.getId(),
                 user.getRole()
         );
     }
