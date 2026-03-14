@@ -1,2 +1,22 @@
-# System-Help-Desk
-System Help Desk is a ticket management application for organizing IT support requests. Users can create and track tickets, technicians can update and resolve them, and admins manage users, categories, and priorities. The project uses role-based access control, JWT authentication, and a REST API.
+API REST desenvolvida com Spring Boot para gerenciamento de chamados de suporte técnico (Help Desk).
+O sistema permite criar, visualizar, atualizar e remover tickets de atendimento, simulando um ambiente real de suporte de TI.
+
+O projeto foi desenvolvido utilizando arquitetura em camadas (Controller, Service e Repository) e Spring Data JPA para persistência de dados.
+
+🚀 Tecnologias Utilizadas
+
+Java 21
+
+Spring Boot
+
+Spring Web
+
+Spring Data JPA
+
+Hibernate
+
+Maven
+
+Banco de dados PostgreSQL
+
+Lombok (opcional)
